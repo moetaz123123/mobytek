@@ -13,3 +13,5 @@ app.listen(PORT, () => {
   console.log(`   - Auth:       http://localhost:${PORT}/api/auth/login`);
   console.log(`   - Dashboard:  http://localhost:${PORT}/api/stats/overview`);
 });
+
+export default app;
