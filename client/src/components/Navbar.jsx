@@ -9,7 +9,8 @@ import {
   ShieldCheck, 
   Truck, 
   Sparkles,
-  MapPin
+  MapPin,
+  User
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import MobyTekLogo from './MobyTekLogo';
@@ -109,6 +110,15 @@ export default function Navbar() {
                 <span>WhatsApp</span>
               </a>
 
+              {/* Admin Login Button */}
+              <Link
+                to="/admin/login"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl text-slate-700 hover:text-brand-600 hover:bg-slate-100 transition border border-slate-200/80 shadow-2xs"
+                title="Connexion Espace Admin"
+              >
+                <User className="w-4 h-4 text-slate-500" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
 
               {/* Cart Drawer Trigger */}
               <button
@@ -193,6 +203,15 @@ export default function Navbar() {
                 <Phone className="w-4 h-4" />
                 <span>+216 25 455 300 / 21 121 870</span>
               </a>
+
+              <Link
+                to="/admin/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-slate-700 font-semibold hover:bg-brand-50 hover:text-brand-600 transition flex items-center gap-2 border-t border-slate-100 pt-3"
+              >
+                <User className="w-4 h-4 text-brand-600" />
+                <span>Connexion Espace Admin</span>
+              </Link>
             </div>
           </div>
         )}
