@@ -85,8 +85,8 @@ export default function AdminLayout() {
                   to={item.path}
                   className={`flex items-center gap-3 px-3.5 py-3 rounded-xl transition ${
                     isActive
-                      ? 'bg-brand-600 text-white font-bold shadow-md'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      ? 'bg-white text-zinc-950 font-bold shadow-sm'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
                   }`}
                 >
                   <Icon className="w-4 h-4 shrink-0" />

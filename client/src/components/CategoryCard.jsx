@@ -42,21 +42,21 @@ export default function CategoryCard({ category }) {
   return (
     <Link
       to={`/catalogue?category=${category.id}`}
-      className="group bg-white rounded-3xl border border-slate-200/90 shadow-soft-card hover:shadow-card-hover hover:border-blue-500/50 transition-all duration-300 flex flex-col overflow-hidden"
+      className="group bg-white rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-black transition-all duration-300 flex flex-col overflow-hidden"
     >
       {/* Category Image Header */}
-      <div className="relative h-44 w-full overflow-hidden bg-slate-100 flex items-center justify-center">
+      <div className="relative h-44 w-full overflow-hidden bg-zinc-100 flex items-center justify-center">
         <img
           src={displaySrc}
           alt={category.name}
           loading="lazy"
           onError={() => setHasError(true)}
-          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
         
         {/* Floating Category Icon */}
-        <div className="absolute bottom-3 left-4 w-11 h-11 rounded-2xl bg-white/95 backdrop-blur-md shadow-md text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-200">
+        <div className="absolute bottom-3 left-4 w-10 h-10 rounded-xl bg-white text-zinc-950 flex items-center justify-center shadow-md group-hover:bg-black group-hover:text-white transition-all duration-200">
           <IconComponent className="w-5 h-5" />
         </div>
       </div>
@@ -64,15 +64,15 @@ export default function CategoryCard({ category }) {
       {/* Content */}
       <div className="p-5 flex-1 flex flex-col justify-between space-y-2">
         <div>
-          <h3 className="font-heading font-black text-slate-900 text-lg group-hover:text-blue-600 transition-colors duration-200">
+          <h3 className="font-heading font-bold text-zinc-950 text-lg group-hover:text-zinc-600 transition-colors duration-200">
             {category.name}
           </h3>
-          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mt-1 font-normal">
+          <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed mt-1 font-normal">
             {category.description}
           </p>
         </div>
 
-        <div className="pt-2 flex items-center text-xs font-bold text-blue-600 group-hover:text-blue-700 gap-1.5 transition duration-200">
+        <div className="pt-2 flex items-center text-xs font-bold text-zinc-900 group-hover:text-black gap-1.5 transition duration-200">
           <span>Découvrir le rayon</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
         </div>

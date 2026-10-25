@@ -95,17 +95,17 @@ export default function MobyTekLogo({
       <div className="flex flex-col">
         <span 
           className={`font-heading font-black leading-tight tracking-wider uppercase ${currentSize.title} ${
-            isLight ? 'text-slate-900' : 'text-white'
+            isLight ? 'text-black' : 'text-white'
           }`}
           style={{ letterSpacing: '0.08em' }}
         >
-          MOBY <span className={isLight ? 'text-brand-600' : 'text-brand-400'}>TEK</span>
+          MOBY <span className={isLight ? 'text-zinc-500' : 'text-zinc-400'}>TEK</span>
         </span>
 
         {showSubtitle && (
           <span 
             className={`font-sans font-bold uppercase ${currentSize.sub} ${
-              isLight ? 'text-slate-500' : 'text-slate-400'
+              isLight ? 'text-zinc-500' : 'text-zinc-400'
             }`}
           >
             PHONES & ACCESSOIRES

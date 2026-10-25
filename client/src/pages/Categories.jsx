@@ -23,15 +23,15 @@ export default function Categories() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-      <div className="text-center max-w-2xl mx-auto space-y-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider">
+      <div className="text-center max-w-2xl mx-auto space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 text-zinc-900 border border-zinc-200 text-xs font-mono font-bold uppercase tracking-wider">
           <Layers className="w-3.5 h-3.5" />
           <span>Rayons Mobytek</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-heading font-black text-slate-900 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-heading font-black text-zinc-950 tracking-tight">
           Toutes nos Catégories de Produits
         </h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-zinc-500">
           Trouvez instantanément l'appareil ou l'accessoire qui répond à vos exigences techniques.
         </p>
       </div>

@@ -317,10 +317,10 @@ export default function ShowroomPhotosFeed() {
             <Camera className="w-3.5 h-3.5 text-blue-600" />
             <span>Catalogue Réel Extrait de la Page Facebook</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-heading font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-heading font-black text-zinc-950 tracking-tight">
             Photos Réelles Showroom &amp; Prix Facebook
           </h2>
-          <p className="text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-sm text-zinc-500 mt-1 max-w-2xl leading-relaxed">
             Tous les articles, coffrets et affiches promotionnelles photographiés au magasin de Sfax (Route El Ain km 3.5) avec leurs prix exacts en Dinars Tunisiens (DT).
           </p>
         </div>
@@ -330,16 +330,16 @@ export default function ShowroomPhotosFeed() {
             href="https://www.facebook.com/profile.php?id=61574218696687&sk=photos_by"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs transition shadow-sm"
           >
-            <span>Voir l'Album Officiel Facebook</span>
+            <span>Album Facebook Officiel</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
           <a
             href="https://wa.me/21625455300"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 font-bold text-xs transition shadow-sm"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>WhatsApp Showroom</span>
@@ -348,15 +348,15 @@ export default function ShowroomPhotosFeed() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-zinc-200">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 ${
               activeTab === tab.id
-                ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
-                : 'bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-black text-white shadow-sm'
+                : 'bg-zinc-100 text-zinc-700 hover:text-black hover:bg-zinc-200 border border-zinc-200'
             }`}
           >
             {tab.label}
@@ -369,21 +369,21 @@ export default function ShowroomPhotosFeed() {
         {filteredPosts.map((post) => (
           <div
             key={post.id}
-            className="group bg-white rounded-3xl border border-slate-200/90 shadow-soft-card hover:shadow-card-hover hover:border-blue-400 transition-all duration-300 flex flex-col overflow-hidden"
+            className="group bg-white rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-black transition-all duration-300 flex flex-col overflow-hidden"
           >
             {/* Photo Container */}
-            <div className="relative aspect-square w-full overflow-hidden bg-slate-100 flex items-center justify-center">
+            <div className="relative aspect-square w-full overflow-hidden bg-zinc-100 flex items-center justify-center">
               <img
                 src={post.image}
                 alt={post.title}
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-85" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-85" />
 
               {/* Floating Badge */}
               <div className="absolute top-3 left-3 z-10">
-                <span className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold shadow-md ${post.badgeColor}`}>
+                <span className="px-2.5 py-1 rounded-md text-[10px] font-black font-mono shadow-sm bg-black text-white">
                   {post.badge}
                 </span>
               </div>
@@ -391,7 +391,7 @@ export default function ShowroomPhotosFeed() {
               {/* Quick Preview Button */}
               <button
                 onClick={() => setSelectedPhoto(post)}
-                className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-white/90 hover:bg-white text-slate-800 shadow-md backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-3 right-3 z-10 p-2 rounded-xl bg-white/90 hover:bg-white text-zinc-900 shadow-md backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity"
                 title="Agrandir la photo"
               >
                 <Eye className="w-3.5 h-3.5" />
@@ -400,16 +400,16 @@ export default function ShowroomPhotosFeed() {
               {/* Price Tag Overlay on Bottom */}
               <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between z-10">
                 <div>
-                  <div className="text-[11px] text-white/80 line-through">
+                  <div className="text-[11px] text-zinc-400 line-through font-mono">
                     {post.originalPrice}
                   </div>
-                  <div className="text-xl font-heading font-black text-white tracking-tight drop-shadow-md">
+                  <div className="text-xl font-heading font-black text-white tracking-tight drop-shadow-md font-mono">
                     {post.price}
                   </div>
                 </div>
 
-                <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/90 text-white text-[10px] font-bold backdrop-blur-sm">
-                  <CheckCircle2 className="w-3 h-3" />
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white text-zinc-950 text-[10px] font-bold shadow-sm font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
                   <span>En Stock Sfax</span>
                 </div>
               </div>
@@ -418,18 +418,18 @@ export default function ShowroomPhotosFeed() {
             {/* Info and Actions */}
             <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
               <div>
-                <h3 className="font-heading font-bold text-slate-900 text-sm group-hover:text-blue-600 transition line-clamp-1">
+                <h3 className="font-heading font-bold text-zinc-950 text-sm group-hover:text-zinc-600 transition line-clamp-1">
                   {post.title}
                 </h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                <p className="text-xs text-zinc-500 mt-1 leading-relaxed line-clamp-2">
                   {post.desc}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-zinc-100 flex items-center justify-between gap-2">
                 <Link
                   to={`/produit/${post.slug}`}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 font-bold text-xs flex items-center gap-1 transition"
+                  className="px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs flex items-center gap-1 transition"
                 >
                   <ShoppingBag className="w-3 h-3" />
                   <span>Fiche</span>
@@ -439,7 +439,7 @@ export default function ShowroomPhotosFeed() {
                   href={`https://wa.me/21625455300?text=${encodeURIComponent(post.whatsappText)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition"
+                  className="px-3 py-1.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs flex items-center gap-1 shadow-sm transition"
                 >
                   <MessageCircle className="w-3 h-3" />
                   <span>Commander</span>
@@ -453,14 +453,14 @@ export default function ShowroomPhotosFeed() {
       {/* Lightbox Modal */}
       {selectedPhoto && (
         <div
-          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
           onClick={() => setSelectedPhoto(null)}
         >
           <div
-            className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200"
+            className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl border border-zinc-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[4/3] w-full bg-slate-100">
+            <div className="relative aspect-[4/3] w-full bg-zinc-100">
               <img
                 src={selectedPhoto.image}
                 alt={selectedPhoto.title}
@@ -468,12 +468,12 @@ export default function ShowroomPhotosFeed() {
               />
               <button
                 onClick={() => setSelectedPhoto(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white transition"
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/70 hover:bg-black text-white transition"
               >
                 <X className="w-5 h-5" />
               </button>
               <div className="absolute top-4 left-4">
-                <span className={`px-3 py-1.5 rounded-xl text-xs font-black shadow-lg ${selectedPhoto.badgeColor}`}>
+                <span className="px-3 py-1.5 rounded-md text-xs font-black shadow-lg bg-black text-white font-mono">
                   {selectedPhoto.badge}
                 </span>
               </div>
@@ -482,19 +482,19 @@ export default function ShowroomPhotosFeed() {
             <div className="p-6 space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-xl font-heading font-black text-slate-900">
+                  <h3 className="text-xl font-heading font-black text-zinc-950">
                     {selectedPhoto.title}
                   </h3>
-                  <p className="text-sm text-slate-600 mt-1">
+                  <p className="text-sm text-zinc-600 mt-1">
                     {selectedPhoto.desc}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-heading font-black text-blue-600">
+                  <span className="text-2xl font-heading font-black text-zinc-950 font-mono">
                     {selectedPhoto.price}
                   </span>
                   {selectedPhoto.originalPrice && (
-                    <div className="text-xs text-slate-400 line-through">
+                    <div className="text-xs text-zinc-400 line-through font-mono">
                       {selectedPhoto.originalPrice}
                     </div>
                   )}
@@ -506,7 +506,7 @@ export default function ShowroomPhotosFeed() {
                   href={`https://wa.me/21625455300?text=${encodeURIComponent(selectedPhoto.whatsappText)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition"
+                  className="flex-1 py-3 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Réserver immédiatement sur WhatsApp</span>
@@ -514,7 +514,7 @@ export default function ShowroomPhotosFeed() {
                 <Link
                   to={`/produit/${selectedPhoto.slug}`}
                   onClick={() => setSelectedPhoto(null)}
-                  className="py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center gap-2 transition"
+                  className="py-3 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-900 font-bold text-sm flex items-center justify-center gap-2 transition"
                 >
                   <ShoppingBag className="w-4 h-4" />
                   <span>Voir la fiche</span>

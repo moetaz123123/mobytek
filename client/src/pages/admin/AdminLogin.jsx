@@ -38,26 +38,26 @@ export default function AdminLogin() {
           <div className="flex justify-center">
             <MobyTekLogo variant="light" size="lg" showSubtitle={true} />
           </div>
-          <h1 className="text-2xl font-heading font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl font-heading font-black text-zinc-950 tracking-tight">
             Espace Administration
           </h1>
-          <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
+          <p className="text-xs text-zinc-500 max-w-xs mx-auto leading-relaxed">
             Accès sécurisé pour la gestion du catalogue, le suivi des commandes et les indicateurs du magasin.
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 shadow-xl shadow-slate-200/50 space-y-6">
+        <div className="bg-white rounded-3xl border border-zinc-200 p-8 shadow-sm space-y-6">
           {error && (
-            <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2 animate-fade-in">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <div className="p-3.5 rounded-2xl bg-zinc-100 border border-zinc-300 text-zinc-950 text-xs flex items-center gap-2 animate-fade-in font-medium">
+              <AlertCircle className="w-4 h-4 text-zinc-900 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Email Administrateur</label>
+              <label className="text-xs font-bold text-zinc-800">Email Administrateur</label>
               <div className="relative">
                 <input
                   type="email"
@@ -66,14 +66,14 @@ export default function AdminLogin() {
                   autoComplete="username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl py-2.5 pl-10 pr-4 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-2.5 pl-10 pr-4 text-xs font-semibold text-zinc-950 focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition"
                 />
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Mot de passe</label>
+              <label className="text-xs font-bold text-zinc-800">Mot de passe</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -82,13 +82,13 @@ export default function AdminLogin() {
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl py-2.5 pl-10 pr-10 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-2.5 pl-10 pr-10 text-xs font-semibold text-zinc-950 focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition"
                 />
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-800 transition"
                   title={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -99,7 +99,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 active:scale-[0.99] disabled:opacity-70"
+              className="w-full py-3.5 px-4 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 active:scale-[0.99] disabled:opacity-70"
             >
               {loading ? (
                 <>
@@ -113,13 +113,13 @@ export default function AdminLogin() {
           </form>
 
           {/* Security guarantee badge */}
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="pt-2 border-t border-zinc-100 flex items-center justify-center gap-1.5 text-[11px] text-zinc-400 font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-zinc-950" />
             <span>Session administrateur protégée et chiffrée</span>
           </div>
 
           <div className="text-center">
-            <Link to="/" className="text-xs text-slate-500 hover:text-slate-800 font-semibold inline-flex items-center gap-1 transition">
+            <Link to="/" className="text-xs text-zinc-500 hover:text-zinc-950 font-semibold inline-flex items-center gap-1 transition">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Retour au site public</span>
             </Link>

@@ -322,68 +322,68 @@ export default function AdminProducts() {
           <button
             onClick={fetchData}
             title="Rafraîchir les données"
-            className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 transition shadow-2xs"
+            className="p-2.5 rounded-xl bg-white hover:bg-zinc-50 text-zinc-600 border border-zinc-200 transition shadow-2xs"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-brand-600' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-zinc-950' : ''}`} />
           </button>
           <button
             onClick={openCreateModal}
-            className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-2"
+            className="px-4 py-2.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-sm transition flex items-center gap-2 active:scale-[0.99]"
           >
             <Plus className="w-4 h-4" />
-            <span>+ Ajouter un produit</span>
+            <span>Ajouter un produit</span>
           </button>
         </div>
       </div>
 
       {/* KPI Overview Pills */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div className="bg-white rounded-2xl p-4 border border-zinc-200 shadow-2xs flex items-center justify-between hover:border-black transition">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Catalogue</span>
-            <div className="text-xl font-black text-slate-900">{stats.total} <span className="text-xs font-semibold text-slate-400">références</span></div>
+            <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">Catalogue</span>
+            <div className="text-xl font-mono font-black text-zinc-950">{stats.total} <span className="text-xs font-semibold text-zinc-400">références</span></div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-950 border border-zinc-200 flex items-center justify-center">
             <Package className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div className="bg-white rounded-2xl p-4 border border-zinc-200 shadow-2xs flex items-center justify-between hover:border-black transition">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Stock Optimal</span>
-            <div className="text-xl font-black text-emerald-600">{stats.total - stats.lowStock - stats.outOfStock}</div>
+            <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">Stock Optimal</span>
+            <div className="text-xl font-mono font-black text-zinc-950">{stats.total - stats.lowStock - stats.outOfStock}</div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-950 border border-zinc-200 flex items-center justify-center">
             <CheckCircle2 className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div className="bg-white rounded-2xl p-4 border border-zinc-200 shadow-2xs flex items-center justify-between hover:border-black transition">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Stock Faible (≤ 5)</span>
-            <div className={`text-xl font-black ${stats.lowStock > 0 ? 'text-amber-600' : 'text-slate-400'}`}>
+            <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">Stock Faible (≤ 5)</span>
+            <div className="text-xl font-mono font-black text-zinc-950">
               {stats.lowStock}
             </div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-950 border border-zinc-200 flex items-center justify-center">
             <AlertTriangle className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div className="bg-white rounded-2xl p-4 border border-zinc-200 shadow-2xs flex items-center justify-between hover:border-black transition">
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">En Promotion</span>
-            <div className="text-xl font-black text-rose-600">{stats.inPromo}</div>
+            <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">En Promotion</span>
+            <div className="text-xl font-mono font-black text-zinc-950">{stats.inPromo}</div>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-950 border border-zinc-200 flex items-center justify-center">
             <Tag className="w-5 h-5" />
           </div>
         </div>
       </div>
 
       {feedback && (
-        <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 shadow-2xs animate-fade-in">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+        <div className="p-3.5 rounded-2xl bg-zinc-100 border border-zinc-300 text-zinc-950 text-xs font-bold flex items-center gap-2 shadow-2xs animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-zinc-950 shrink-0" />
           <span>{feedback}</span>
         </div>
       )}
@@ -421,7 +421,7 @@ export default function AdminProducts() {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 aria-label="Filtrer par catégorie"
-                className="bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl py-2 px-3 focus:outline-none focus:bg-white focus:border-brand-500 transition cursor-pointer"
+                className="bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold text-xs rounded-xl py-2 px-3 focus:outline-none focus:bg-white focus:border-black transition cursor-pointer"
               >
                 <option value="all">Toutes les catégories</option>
                 {categories.map((c) => (
@@ -436,7 +436,7 @@ export default function AdminProducts() {
                 value={selectedStockFilter}
                 onChange={(e) => setSelectedStockFilter(e.target.value)}
                 aria-label="Filtrer par statut de stock"
-                className="bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl py-2 px-3 focus:outline-none focus:bg-white focus:border-brand-500 transition cursor-pointer"
+                className="bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold text-xs rounded-xl py-2 px-3 focus:outline-none focus:bg-white focus:border-black transition cursor-pointer"
               >
                 <option value="all">Tous les stocks</option>
                 <option value="in_stock">En stock (&gt; 0)</option>
@@ -451,7 +451,7 @@ export default function AdminProducts() {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 aria-label="Trier les produits"
-                className="bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl py-2 px-3 focus:outline-none focus:bg-white focus:border-brand-500 transition cursor-pointer"
+                className="bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold text-xs rounded-xl py-2 px-3 focus:outline-none focus:bg-white focus:border-black transition cursor-pointer"
               >
                 <option value="default">Tri par défaut</option>
                 <option value="price_asc">Prix croissant</option>
@@ -465,7 +465,7 @@ export default function AdminProducts() {
             {hasActiveFilters && (
               <button
                 onClick={resetFilters}
-                className="text-xs font-bold text-brand-600 hover:text-brand-800 px-2 py-1 rounded-lg hover:bg-brand-50 transition"
+                className="text-xs font-bold text-zinc-950 hover:underline px-2 py-1 rounded-lg hover:bg-zinc-100 transition"
               >
                 Réinitialiser
               </button>
@@ -480,17 +480,17 @@ export default function AdminProducts() {
             Affichage de <strong className="text-slate-800">{filteredProducts.length}</strong> sur <strong className="text-slate-800">{products.length}</strong> article(s)
           </span>
           {hasActiveFilters && (
-            <span className="text-brand-600 font-semibold">Filtres actifs</span>
+            <span className="text-zinc-950 font-bold font-mono">Filtres actifs</span>
           )}
         </div>
       </div>
 
       {/* Products Table */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50/80 text-slate-500 uppercase tracking-wider font-bold">
+              <tr className="border-b border-zinc-200 bg-zinc-50 text-zinc-500 uppercase tracking-wider font-mono font-bold">
                 <th className="py-3.5 px-5">Produit & Réf.</th>
                 <th className="py-3.5 px-4">Marque</th>
                 <th className="py-3.5 px-4">Catégorie</th>
@@ -500,13 +500,13 @@ export default function AdminProducts() {
                 <th className="py-3.5 px-5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-medium">
+            <tbody className="divide-y divide-zinc-100 font-medium">
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-12 text-slate-400">
+                  <td colSpan="7" className="text-center py-12 text-zinc-400">
                     <div className="flex flex-col items-center justify-center space-y-2">
-                      <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
-                      <span className="text-xs font-bold text-slate-600">Chargement du catalogue...</span>
+                      <Loader2 className="w-6 h-6 animate-spin text-zinc-950" />
+                      <span className="text-xs font-bold text-zinc-600">Chargement du catalogue...</span>
                     </div>
                   </td>
                 </tr>
@@ -514,19 +514,19 @@ export default function AdminProducts() {
                 <tr>
                   <td colSpan="7" className="text-center py-12">
                     <div className="flex flex-col items-center justify-center space-y-2">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-1">
+                      <div className="w-12 h-12 rounded-2xl bg-zinc-100 text-zinc-400 flex items-center justify-center mb-1 border border-zinc-200">
                         <Package className="w-6 h-6" />
                       </div>
-                      <p className="font-heading font-bold text-slate-800 text-sm">
+                      <p className="font-heading font-bold text-zinc-900 text-sm">
                         Aucun produit ne correspond à votre recherche
                       </p>
-                      <p className="text-xs text-slate-400 max-w-sm">
+                      <p className="text-xs text-zinc-400 max-w-sm">
                         Essayez de modifier vos filtres ou de réinitialiser la recherche pour voir toutes les références.
                       </p>
                       {hasActiveFilters && (
                         <button
                           onClick={resetFilters}
-                          className="mt-2 px-3.5 py-1.5 rounded-xl bg-brand-50 text-brand-700 hover:bg-brand-100 font-bold text-xs transition"
+                          className="mt-2 px-3.5 py-1.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs transition active:scale-[0.99]"
                         >
                           Réinitialiser les filtres
                         </button>
@@ -541,12 +541,12 @@ export default function AdminProducts() {
                     : null;
 
                   return (
-                    <tr key={prod.id} className="hover:bg-slate-50/80 transition group">
+                    <tr key={prod.id} className="hover:bg-zinc-50 transition group">
                       
                       {/* Product Thumbnail & Name */}
                       <td className="py-3.5 px-5">
                         <div className="flex items-center gap-3.5">
-                          <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-1 shrink-0 flex items-center justify-center shadow-2xs group-hover:border-brand-300 transition">
+                          <div className="w-12 h-12 rounded-xl bg-white border border-zinc-200 p-1 shrink-0 flex items-center justify-center shadow-2xs group-hover:border-black transition">
                             <img
                               src={prod.images?.[0] || 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=150&q=80'}
                               alt={prod.name}
@@ -559,7 +559,7 @@ export default function AdminProducts() {
                           <div className="min-w-0 max-w-xs">
                             <button
                               onClick={() => openEditModal(prod)}
-                              className="font-bold text-slate-900 text-left line-clamp-1 hover:text-brand-600 transition block text-[13px]"
+                              className="font-bold text-zinc-950 text-left line-clamp-1 hover:underline transition block text-[13px]"
                               title={prod.name}
                             >
                               {prod.name}
@@ -597,7 +597,7 @@ export default function AdminProducts() {
                                 {formatPrice(prod.original_price)}
                               </span>
                               {discountPercent && (
-                                <span className="text-[9px] font-black text-rose-600 bg-rose-50 px-1 py-0.2 rounded">
+                                <span className="text-[9px] font-mono font-bold text-zinc-950 bg-zinc-100 border border-zinc-200 px-1.5 py-0.2 rounded">
                                   -{discountPercent}%
                                 </span>
                               )}
@@ -609,18 +609,18 @@ export default function AdminProducts() {
                       {/* Stock Status Badge */}
                       <td className="py-3.5 px-4">
                         {prod.stock <= 0 ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-zinc-100 text-zinc-400 border border-zinc-200 line-through">
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
                             Rupture
                           </span>
                         ) : prod.stock <= 5 ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-zinc-100 text-zinc-950 border border-zinc-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-950 animate-pulse" />
                             {prod.stock} restant{prod.stock > 1 ? 's' : ''}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-zinc-50 text-zinc-900 border border-zinc-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-zinc-950" />
                             {prod.stock} en stock
                           </span>
                         )}
@@ -630,22 +630,22 @@ export default function AdminProducts() {
                       <td className="py-3.5 px-4">
                         <div className="flex flex-wrap gap-1">
                           {prod.is_promo && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-700 text-[9px] font-black uppercase tracking-wider">
-                              Promo
+                            <span className="px-2 py-0.5 rounded-md bg-black text-white text-[9px] font-mono font-bold uppercase tracking-wider">
+                              PROMO
                             </span>
                           )}
                           {prod.is_new && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-sky-100 text-sky-800 text-[9px] font-bold">
+                            <span className="px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-900 border border-zinc-200 text-[9px] font-mono font-bold">
                               Nouveau
                             </span>
                           )}
                           {prod.is_featured && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[9px] font-bold flex items-center gap-0.5">
+                            <span className="px-2 py-0.5 rounded-md bg-zinc-900 text-zinc-100 text-[9px] font-mono font-bold flex items-center gap-0.5">
                               ★ Vedette
                             </span>
                           )}
                           {!prod.is_promo && !prod.is_new && !prod.is_featured && (
-                            <span className="text-slate-300 text-[10px]">—</span>
+                            <span className="text-zinc-300 text-[10px]">—</span>
                           )}
                         </div>
                       </td>
@@ -657,10 +657,10 @@ export default function AdminProducts() {
                           {/* Modifier Button */}
                           <button
                             onClick={() => openEditModal(prod)}
-                            className="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-brand-50 hover:text-brand-700 text-slate-700 border border-slate-200/90 font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs"
+                            className="px-2.5 py-1.5 rounded-xl bg-zinc-50 hover:bg-zinc-100 hover:text-black text-zinc-700 border border-zinc-200 font-bold text-xs inline-flex items-center gap-1.5 transition shadow-2xs"
                             title="Modifier ce produit"
                           >
-                            <Edit3 className="w-3.5 h-3.5 text-slate-500 group-hover:text-brand-600" />
+                            <Edit3 className="w-3.5 h-3.5 text-zinc-500" />
                             <span className="hidden sm:inline">Modifier</span>
                           </button>
 
@@ -740,9 +740,9 @@ export default function AdminProducts() {
           <div className="bg-white rounded-3xl max-w-4xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-scale-up border border-slate-100">
             
             {/* Compact Header */}
-            <div className="px-6 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="px-6 py-3.5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-2xs">
+                <div className="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-950 border border-zinc-200 flex items-center justify-center shadow-2xs">
                   <Package className="w-4 h-4" />
                 </div>
                 <div>
@@ -820,24 +820,24 @@ export default function AdminProducts() {
                         placeholder="5299.000"
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                        className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-brand-500 rounded-xl py-1.5 px-2.5 text-xs font-bold text-brand-700 focus:bg-white focus:outline-none transition"
+                        className="w-full bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus:border-black rounded-xl py-1.5 px-2.5 text-xs font-mono font-bold text-zinc-950 focus:bg-white focus:outline-none transition"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-700 text-[11px]">Prix Barré (DT)</label>
+                      <label className="font-bold text-zinc-700 text-[11px]">Prix Barré (DT)</label>
                       <input
                         type="number"
                         step="0.001"
                         placeholder="Optionnel"
                         value={formData.original_price}
                         onChange={(e) => setFormData({ ...formData, original_price: e.target.value })}
-                        className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-brand-500 rounded-xl py-1.5 px-2.5 text-xs font-medium focus:bg-white focus:outline-none transition"
+                        className="w-full bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus:border-black rounded-xl py-1.5 px-2.5 text-xs font-mono font-medium focus:bg-white focus:outline-none transition"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="font-bold text-slate-700 text-[11px]">Quantité Stock *</label>
+                      <label className="font-bold text-zinc-700 text-[11px]">Quantité Stock *</label>
                       <input
                         type="number"
                         required
@@ -845,21 +845,21 @@ export default function AdminProducts() {
                         placeholder="10"
                         value={formData.stock}
                         onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                        className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-brand-500 rounded-xl py-1.5 px-2.5 text-xs font-semibold focus:bg-white focus:outline-none transition"
+                        className="w-full bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus:border-black rounded-xl py-1.5 px-2.5 text-xs font-mono font-semibold focus:bg-white focus:outline-none transition"
                       />
                     </div>
                   </div>
 
                   {/* Description */}
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 text-[11px]">Description Commerciale *</label>
+                    <label className="font-bold text-zinc-700 text-[11px]">Description Commerciale *</label>
                     <textarea
                       rows="2"
                       required
                       placeholder="Présentation des fonctionnalités et atouts du produit..."
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-brand-500 rounded-xl py-1.5 px-3 text-xs font-medium focus:bg-white focus:outline-none transition"
+                      className="w-full bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus:border-black rounded-xl py-1.5 px-3 text-xs font-medium focus:bg-white focus:outline-none transition"
                     />
                   </div>
 
@@ -870,27 +870,27 @@ export default function AdminProducts() {
                         type="checkbox"
                         checked={formData.is_promo}
                         onChange={(e) => setFormData({ ...formData, is_promo: e.target.checked })}
-                        className="w-3.5 h-3.5 text-brand-600 rounded accent-brand-600"
+                        className="w-3.5 h-3.5 text-black rounded accent-black"
                       />
-                      <span className="font-bold text-slate-700 text-[11px]">En Promo</span>
+                      <span className="font-bold text-zinc-700 text-[11px]">En Promo</span>
                     </label>
                     <label className="flex items-center gap-1.5 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={formData.is_new}
                         onChange={(e) => setFormData({ ...formData, is_new: e.target.checked })}
-                        className="w-3.5 h-3.5 text-brand-600 rounded accent-brand-600"
+                        className="w-3.5 h-3.5 text-black rounded accent-black"
                       />
-                      <span className="font-bold text-slate-700 text-[11px]">Nouveau 2026</span>
+                      <span className="font-bold text-zinc-700 text-[11px]">Nouveau 2026</span>
                     </label>
                     <label className="flex items-center gap-1.5 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={formData.is_featured}
                         onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                        className="w-3.5 h-3.5 text-brand-600 rounded accent-brand-600"
+                        className="w-3.5 h-3.5 text-black rounded accent-black"
                       />
-                      <span className="font-bold text-slate-700 text-[11px]">En Vedette (Bestseller)</span>
+                      <span className="font-bold text-zinc-700 text-[11px]">En Vedette (Bestseller)</span>
                     </label>
                   </div>
 
@@ -902,22 +902,22 @@ export default function AdminProducts() {
                   {/* Photo Import Zone */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="font-bold text-slate-700 text-[11px] flex items-center gap-1">
-                        <ImageIcon className="w-3.5 h-3.5 text-brand-600" />
+                      <label className="font-bold text-zinc-700 text-[11px] flex items-center gap-1">
+                        <ImageIcon className="w-3.5 h-3.5 text-zinc-950" />
                         <span>Photo du Produit *</span>
                       </label>
-                      <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-[9px] font-bold">
+                      <div className="flex items-center gap-1 bg-zinc-100 p-0.5 rounded-lg text-[9px] font-bold">
                         <button
                           type="button"
                           onClick={() => setUploadMode('file')}
-                          className={`px-1.5 py-0.5 rounded transition ${uploadMode === 'file' ? 'bg-white text-brand-700 shadow-2xs' : 'text-slate-500'}`}
+                          className={`px-1.5 py-0.5 rounded transition ${uploadMode === 'file' ? 'bg-black text-white shadow-2xs' : 'text-zinc-500 hover:text-zinc-950'}`}
                         >
                           PC
                         </button>
                         <button
                           type="button"
                           onClick={() => setUploadMode('url')}
-                          className={`px-1.5 py-0.5 rounded transition ${uploadMode === 'url' ? 'bg-white text-brand-700 shadow-2xs' : 'text-slate-500'}`}
+                          className={`px-1.5 py-0.5 rounded transition ${uploadMode === 'url' ? 'bg-black text-white shadow-2xs' : 'text-zinc-500 hover:text-zinc-950'}`}
                         >
                           URL
                         </button>
@@ -935,9 +935,9 @@ export default function AdminProducts() {
                         />
 
                         {formData.imageUrl ? (
-                          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between gap-2.5">
+                          <div className="p-2.5 bg-zinc-50 border border-zinc-200 rounded-2xl flex items-center justify-between gap-2.5">
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <div className="w-14 h-14 rounded-xl bg-white border border-slate-200 p-1 shrink-0 flex items-center justify-center shadow-2xs">
+                              <div className="w-14 h-14 rounded-xl bg-white border border-zinc-200 p-1 shrink-0 flex items-center justify-center shadow-2xs">
                                 <img
                                   src={formData.imageUrl}
                                   alt="Aperçu sélection"
@@ -945,10 +945,10 @@ export default function AdminProducts() {
                                 />
                               </div>
                               <div className="min-w-0">
-                                <span className="font-bold text-slate-900 text-[11px] block truncate">
+                                <span className="font-bold text-zinc-950 text-[11px] block truncate">
                                   {fileMeta?.name || 'Photo sélectionnée'}
                                 </span>
-                                <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded mt-0.5">
+                                <span className="inline-flex items-center gap-1 text-[9px] font-bold text-zinc-900 bg-zinc-100 border border-zinc-200 px-1.5 py-0.2 rounded mt-0.5">
                                   <Check className="w-2.5 h-2.5" /> Prête
                                 </span>
                               </div>
@@ -958,9 +958,9 @@ export default function AdminProducts() {
                               <button
                                 type="button"
                                 onClick={() => fileInputRef.current?.click()}
-                                className="px-2 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-[10px] transition shadow-2xs flex items-center gap-1"
+                                className="px-2 py-1 rounded-lg bg-white hover:bg-zinc-100 text-zinc-700 border border-zinc-200 font-bold text-[10px] transition shadow-2xs flex items-center gap-1"
                               >
-                                <FolderOpen className="w-3 h-3 text-brand-600" />
+                                <FolderOpen className="w-3 h-3 text-zinc-950" />
                                 <span>Changer</span>
                               </button>
                               <button
@@ -984,18 +984,18 @@ export default function AdminProducts() {
                             onDrop={handleDrop}
                             className={`border-2 border-dashed rounded-2xl p-3.5 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-1 ${
                               isDragging 
-                                ? 'border-brand-500 bg-brand-50/50 scale-[0.99]' 
-                                : 'border-slate-300 hover:border-brand-400 bg-slate-50/60 hover:bg-slate-50'
+                                ? 'border-black bg-zinc-100/50 scale-[0.99]' 
+                                : 'border-zinc-300 hover:border-black bg-zinc-50/60 hover:bg-zinc-50'
                             }`}
                           >
-                            <div className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-2xs">
+                            <div className="w-8 h-8 rounded-xl bg-zinc-100 text-zinc-950 border border-zinc-200 flex items-center justify-center shadow-2xs">
                               <UploadCloud className="w-4 h-4" />
                             </div>
                             <div>
-                              <p className="font-bold text-slate-800 text-[11px]">
-                                Importer depuis votre <span className="text-brand-600">Bureau / PC</span>
+                              <p className="font-bold text-zinc-800 text-[11px]">
+                                Importer depuis votre <span className="text-zinc-950 underline">Bureau / PC</span>
                               </p>
-                              <p className="text-[10px] text-slate-400">
+                              <p className="text-[10px] text-zinc-400">
                                 ou glissez l'image ici (JPG, PNG, WEBP)
                               </p>
                             </div>
@@ -1012,7 +1012,7 @@ export default function AdminProducts() {
                             setFormData({ ...formData, imageUrl: e.target.value });
                             setFileMeta(null);
                           }}
-                          className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-brand-500 rounded-xl py-1.5 px-3 text-xs font-medium focus:bg-white focus:outline-none transition"
+                          className="w-full bg-zinc-50 border border-zinc-200 hover:border-zinc-300 focus:border-black rounded-xl py-1.5 px-3 text-xs font-medium focus:bg-white focus:outline-none transition"
                         />
                       </div>
                     )}
@@ -1020,48 +1020,48 @@ export default function AdminProducts() {
 
                   {/* Specs Techniques Rapides */}
                   <div className="space-y-1.5 pt-1">
-                    <span className="font-bold uppercase tracking-wider text-slate-400 text-[9px] block">
+                    <span className="font-bold uppercase tracking-wider text-zinc-400 text-[9px] block font-mono">
                       Spécifications Techniques
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="text-[10px] text-slate-500 font-semibold">Écran</label>
+                        <label className="text-[10px] text-zinc-500 font-semibold">Écran</label>
                         <input
                           type="text"
                           placeholder="Ex: 6.9 pouces OLED"
                           value={formData.specs_screen}
                           onChange={(e) => setFormData({ ...formData, specs_screen: e.target.value })}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
+                          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-slate-500 font-semibold">Stockage</label>
+                        <label className="text-[10px] text-zinc-500 font-semibold">Stockage</label>
                         <input
                           type="text"
                           placeholder="Ex: 256 Go"
                           value={formData.specs_storage}
                           onChange={(e) => setFormData({ ...formData, specs_storage: e.target.value })}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
+                          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-slate-500 font-semibold">RAM</label>
+                        <label className="text-[10px] text-zinc-500 font-semibold">RAM</label>
                         <input
                           type="text"
                           placeholder="Ex: 8 Go"
                           value={formData.specs_ram}
                           onChange={(e) => setFormData({ ...formData, specs_ram: e.target.value })}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
+                          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-slate-500 font-semibold">Batterie</label>
+                        <label className="text-[10px] text-zinc-500 font-semibold">Batterie</label>
                         <input
                           type="text"
                           placeholder="Ex: 5000 mAh"
                           value={formData.specs_battery}
                           onChange={(e) => setFormData({ ...formData, specs_battery: e.target.value })}
-                          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
+                          className="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-1.5 text-[11px] focus:bg-white focus:outline-none"
                         />
                       </div>
                     </div>
@@ -1072,18 +1072,18 @@ export default function AdminProducts() {
               </div>
 
               {/* Fixed Footer Bar with Action Buttons */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-zinc-100 flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold transition text-xs"
+                  className="px-4 py-2 rounded-xl text-zinc-600 hover:bg-zinc-100 font-bold transition text-xs"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold flex items-center gap-1.5 shadow-sm disabled:opacity-50 transition text-xs"
+                  className="px-5 py-2 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold flex items-center gap-1.5 shadow-sm disabled:opacity-50 transition text-xs active:scale-[0.99]"
                 >
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{editingProduct ? 'Enregistrer les modifications' : 'Créer le produit'}</span>

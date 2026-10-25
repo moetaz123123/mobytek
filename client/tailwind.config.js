@@ -8,29 +8,28 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb', // Royal Sapphire
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#0f172a',
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          400: '#a1a1aa',
+          500: '#71717a',
+          600: '#18181b', // Carbon Black
+          700: '#121214',
+          800: '#09090b',
+          900: '#000000', // Absolute Pure Black
+          950: '#000000',
         },
-        slate: {
-          850: '#151f32',
-          925: '#0b111e',
-          950: '#070b14',
+        dark: {
+          900: '#0a0a0c',
+          950: '#000000',
         },
         accent: {
-          50: '#fff1f2',
-          100: '#ffe4e6',
-          500: '#f43f5e',
-          600: '#e11d48',
-          700: '#be123c',
+          50: '#fafafa',
+          100: '#f4f4f5',
+          500: '#18181b',
+          600: '#09090b',
+          700: '#000000',
         }
       },
       fontFamily: {
@@ -38,12 +37,10 @@ export default {
         heading: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'glow': '0 0 30px -5px rgba(37, 99, 235, 0.4)',
-        'glow-lg': '0 0 50px -10px rgba(37, 99, 235, 0.5)',
-        'glow-emerald': '0 0 30px -5px rgba(16, 185, 129, 0.4)',
-        'glow-accent': '0 0 30px -5px rgba(244, 63, 94, 0.4)',
-        'soft-card': '0 10px 30px -10px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.03)',
-        'card-hover': '0 25px 40px -15px rgba(37, 99, 235, 0.12), 0 10px 20px -10px rgba(15, 23, 42, 0.06)',
+        'glow': '0 0 25px -5px rgba(0, 0, 0, 0.35)',
+        'glow-lg': '0 0 50px -10px rgba(0, 0, 0, 0.5)',
+        'soft-card': '0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.02)',
+        'card-hover': '0 25px 45px -12px rgba(0, 0, 0, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.04)',
       },
       animation: {
         'float': 'float 5s ease-in-out infinite',
@@ -57,7 +54,7 @@ export default {
         },
         pulseSubtle: {
           '0%, 100%': { opacity: '1', transform: 'scale(1)' },
-          '50%': { opacity: '0.96', transform: 'scale(1.015)' },
+          '50%': { opacity: '0.97', transform: 'scale(1.01)' },
         },
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
