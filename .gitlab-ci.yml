@@ -4,6 +4,7 @@ stages:
   - security
   - package
   - container_scan
+  - reporting
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
@@ -12,6 +13,7 @@ variables:
   DOCKER_TLS_VERIFY: "1"
   DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   TRIVY_NO_PROGRESS: "true"
+  DEFECTDOJO_URL: "http://host.docker.internal:8080"
 
 cache:
   key: "mobytek-npm-cache"
@@ -21,6 +23,8 @@ cache:
 # 1. Build React frontend
 build_frontend:
   stage: test
+  tags:
+    - mobytek
   image: node:22
   script:
     - npm ci --prefix client
@@ -35,6 +39,8 @@ build_frontend:
 # 2. Lint frontend
 lint_frontend:
   stage: test
+  tags:
+    - mobytek
   image: node:22
   script:
     - npm ci --prefix client
@@ -45,6 +51,8 @@ lint_frontend:
 # 3. Backend syntax check
 check_backend:
   stage: test
+  tags:
+    - mobytek
   image: node:22
   script:
     - npm ci --prefix server
@@ -55,6 +63,8 @@ check_backend:
 # 4. SAST with Semgrep
 semgrep_sast:
   stage: security
+  tags:
+    - mobytek
   image:
     name: semgrep/semgrep:latest
     entrypoint: [""]
@@ -67,17 +77,21 @@ semgrep_sast:
 # 5. Dependency vulnerability scanning
 dependency_scanning:
   stage: security
+  tags:
+    - mobytek
   image: node:22
   script:
-    - npm audit --audit-level=high
-    - npm audit --prefix client --audit-level=high
-    - npm audit --prefix server --audit-level=high
+    - npm audit --audit-level=high --prefix client
+    - npm audit --audit-level=high --prefix server
+  allow_failure: false
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
 # 6. Secret detection with Gitleaks
 secret_detection:
   stage: security
+  tags:
+    - mobytek
   image:
     name: zricethezav/gitleaks:latest
     entrypoint: [""]
@@ -90,10 +104,11 @@ secret_detection:
 # 7. Build and push Docker images
 build_and_push_images:
   stage: package
+  tags:
+    - mobytek
   image: docker:27.5.1-cli
   services:
     - name: docker:27.5.1-dind
-      alias: docker
   script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
@@ -104,9 +119,11 @@ build_and_push_images:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 8. Scan Docker images with Trivy
+# 8. Scan Docker images and generate JSON reports
 container_scanning:
   stage: container_scan
+  tags:
+    - mobytek
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
@@ -115,8 +132,54 @@ container_scanning:
     TRIVY_PASSWORD: "$CI_REGISTRY_PASSWORD"
     TRIVY_AUTH_URL: "$CI_REGISTRY"
   script:
+    - mkdir -p reports
+    - trivy image --format json --output reports/trivy-client.json "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
+    - trivy image --format json --output reports/trivy-server.json "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
     - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
     - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    expire_in: 1 week
   allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+# 9. Import Trivy reports into DefectDojo
+defectdojo_import:
+  stage: reporting
+  tags:
+    - mobytek
+  image:
+    name: curlimages/curl:8.12.1
+    entrypoint: [""]
+  needs:
+    - job: container_scanning
+      artifacts: true
+  when: always
+  script:
+    - test -s reports/trivy-client.json
+    - test -s reports/trivy-server.json
+    - |
+      curl --fail-with-body --silent --show-error \
+        --request POST \
+        "${DEFECTDOJO_URL%/}/api/v2/import-scan/" \
+        --header "Authorization: Token ${DEFECTDOJO_API_TOKEN}" \
+        --form "scan_type=Trivy Scan" \
+        --form "file=@reports/trivy-client.json" \
+        --form "product_name=Mobytek" \
+        --form "engagement_name=GitLab CI" \
+        --form "auto_create_context=true"
+    - |
+      curl --fail-with-body --silent --show-error \
+        --request POST \
+        "${DEFECTDOJO_URL%/}/api/v2/import-scan/" \
+        --header "Authorization: Token ${DEFECTDOJO_API_TOKEN}" \
+        --form "scan_type=Trivy Scan" \
+        --form "file=@reports/trivy-server.json" \
+        --form "product_name=Mobytek" \
+        --form "engagement_name=GitLab CI" \
+        --form "auto_create_context=true"
   rules:
     - if: '$CI_COMMIT_BRANCH'
