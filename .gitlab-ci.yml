@@ -8,11 +8,7 @@ variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
 
 cache:
-  key:
-    files:
-      - package-lock.json
-      - client/package-lock.json
-      - server/package-lock.json
+  key: "mobytek-npm-cache"
   paths:
     - .npm/
 
@@ -32,6 +28,10 @@ build_frontend:
   script:
     - npm ci --prefix client
     - npm run build --prefix client
+  artifacts:
+    paths:
+      - client/dist/
+    expire_in: 1 week
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
