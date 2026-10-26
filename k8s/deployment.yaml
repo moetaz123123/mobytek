@@ -23,7 +23,7 @@ spec:
         runAsGroup: 101
       containers:
         - name: client
-          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-client:latest
+          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-client:f8df19645bd158fc2cade2288c4b3abb53f4ebf7
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -58,7 +58,7 @@ spec:
         runAsGroup: 1000
       containers:
         - name: server
-          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-server:latest
+          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-server:f8df19645bd158fc2cade2288c4b3abb53f4ebf7
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
