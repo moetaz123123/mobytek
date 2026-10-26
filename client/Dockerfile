@@ -15,6 +15,8 @@ RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:alpine
 
+RUN apk upgrade --no-cache
+
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 8080
