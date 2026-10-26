@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://gitlab.com/moetazbenameur3/mobytek.git
+    repoURL: git@gitlab.com:moetazbenameur3/mobytek.git
     targetRevision: main
     path: k8s
   destination:
@@ -18,3 +18,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
