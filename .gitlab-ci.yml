@@ -1,9 +1,9 @@
-
 stages:
   - test
   - security
   - package
   - container_scan
+  - reporting
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
@@ -115,8 +115,51 @@ container_scanning:
     TRIVY_PASSWORD: "$CI_REGISTRY_PASSWORD"
     TRIVY_AUTH_URL: "$CI_REGISTRY"
   script:
+    - mkdir -p reports
+    - trivy image --format json --output reports/trivy-client.json "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
+    - trivy image --format json --output reports/trivy-server.json "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
     - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
     - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    expire_in: 1 week
   allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+defectdojo_import:
+  stage: reporting
+  image:
+    name: curlimages/curl:8.12.1
+    entrypoint: [""]
+  needs:
+    - job: container_scanning
+      artifacts: true
+  when: always
+  script:
+    - test -s reports/trivy-client.json
+    - test -s reports/trivy-server.json
+    - >
+      curl --fail-with-body --silent --show-error
+      --request POST
+      "${DEFECTDOJO_URL%/}/api/v2/import-scan/"
+      --header "Authorization: Token ${DEFECTDOJO_API_TOKEN}"
+      --form "scan_type=Trivy Scan"
+      --form "file=@reports/trivy-client.json"
+      --form "product_name=Mobytek"
+      --form "engagement_name=GitLab CI"
+      --form "auto_create_context=true"
+    - >
+      curl --fail-with-body --silent --show-error
+      --request POST
+      "${DEFECTDOJO_URL%/}/api/v2/import-scan/"
+      --header "Authorization: Token ${DEFECTDOJO_API_TOKEN}"
+      --form "scan_type=Trivy Scan"
+      --form "file=@reports/trivy-server.json"
+      --form "product_name=Mobytek"
+      --form "engagement_name=GitLab CI"
+      --form "auto_create_context=true"
   rules:
     - if: '$CI_COMMIT_BRANCH'
