@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mobytek-client
+  namespace: mobytek
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mobytek-client
+  template:
+    metadata:
+      labels:
+        app: mobytek-client
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry
+      containers:
+        - name: client
+          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-client:e0438339dcefc44785d255d55b0453a920273ba9
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mobytek-server
+  namespace: mobytek
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mobytek-server
+  template:
+    metadata:
+      labels:
+        app: mobytek-server
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry
+      containers:
+        - name: server
+          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-server:e0438339dcefc44785d255d55b0453a920273ba9
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
