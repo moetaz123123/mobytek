@@ -1,7 +1,9 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mobytek-client
+  namespace: mobytek
   labels:
     app: mobytek-client
 spec:
@@ -14,6 +16,8 @@ spec:
       labels:
         app: mobytek-client
     spec:
+      imagePullSecrets:
+        - name: gitlab-registry
       securityContext:
         runAsNonRoot: true
         runAsUser: 101
@@ -21,28 +25,34 @@ spec:
       containers:
         - name: client
           image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-client:latest
+          imagePullPolicy: Always
           ports:
-            - containerPort: 8080   # nginx-unprivileged écoute sur 8080
+            - containerPort: 8080
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mobytek-client
+  namespace: mobytek
 spec:
+  type: NodePort
   selector:
     app: mobytek-client
   ports:
     - port: 80
       targetPort: 8080
+      nodePort: 30080
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mobytek-server
+  namespace: mobytek
   labels:
     app: mobytek-server
 spec:
@@ -55,27 +65,34 @@ spec:
       labels:
         app: mobytek-server
     spec:
+      imagePullSecrets:
+        - name: gitlab-registry
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000   # UID de l'utilisateur "node"
+        runAsUser: 1000
         runAsGroup: 1000
       containers:
         - name: server
           image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-server:latest
+          imagePullPolicy: Always
           ports:
-            - containerPort: 3000   # adapte à ton port réel
+            - containerPort: 3000
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mobytek-server
+  namespace: mobytek
 spec:
+  type: NodePort
   selector:
     app: mobytek-server
   ports:
     - port: 3000
       targetPort: 3000
+      nodePort: 30081
