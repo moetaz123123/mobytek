@@ -1,34 +1,63 @@
+
 stages:
+  - install
   - test
   - security
 
 variables:
-  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
 
 cache:
   key:
     files:
       - package-lock.json
+      - client/package-lock.json
+      - server/package-lock.json
   paths:
     - .npm/
 
-run_tests:
-  stage: test
+install_dependencies:
+  stage: install
   image: node:22
   script:
     - npm ci
-    - npm run
-    - npm test --if-present
-    - npm run build
+    - npm ci --prefix client
+    - npm ci --prefix server
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+build_frontend:
+  stage: test
+  image: node:22
+  script:
+    - npm ci --prefix client
+    - npm run build --prefix client
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+lint_frontend:
+  stage: test
+  image: node:22
+  script:
+    - npm ci --prefix client
+    - npm run lint --prefix client
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+check_backend:
+  stage: test
+  image: node:22
+  script:
+    - npm ci --prefix server
+    - node --check server/src/index.js
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
 secret_detection:
   stage: security
-  image: node:22
+  image: zricethezav/gitleaks:latest
   script:
-    - npm ci
-    - npx --yes gitleaks detect --source . --no-git --redact
+    - gitleaks detect --source . --no-git --redact
   allow_failure: false
   rules:
     - if: '$CI_COMMIT_BRANCH'
