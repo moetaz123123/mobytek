@@ -15,12 +15,12 @@ RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:alpine
 
+USER root
 RUN apk upgrade --no-cache
+USER nginx
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 8080
-
-USER nginx
 
 CMD ["nginx", "-g", "daemon off;"]
