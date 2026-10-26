@@ -1,27 +1,24 @@
 
 stages:
-  - install
   - test
   - security
+  - package
+  - container_scan
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  DOCKER_HOST: "tcp://docker:2376"
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: "1"
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  TRIVY_NO_PROGRESS: "true"
 
 cache:
   key: "mobytek-npm-cache"
   paths:
     - .npm/
 
-install_dependencies:
-  stage: install
-  image: node:22
-  script:
-    - npm ci
-    - npm ci --prefix client
-    - npm ci --prefix server
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-
+# 1. Build React frontend
 build_frontend:
   stage: test
   image: node:22
@@ -35,6 +32,7 @@ build_frontend:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
+# 2. Lint frontend
 lint_frontend:
   stage: test
   image: node:22
@@ -44,6 +42,7 @@ lint_frontend:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
+# 3. Backend syntax check
 check_backend:
   stage: test
   image: node:22
@@ -53,7 +52,30 @@ check_backend:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
+# 4. SAST with Semgrep
+semgrep_sast:
+  stage: security
+  image:
+    name: semgrep/semgrep:latest
+    entrypoint: [""]
+  script:
+    - semgrep scan --config auto --error .
+  allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
 
+# 5. Dependency vulnerability scanning
+dependency_scanning:
+  stage: security
+  image: node:22
+  script:
+    - npm audit --audit-level=high
+    - npm audit --prefix client --audit-level=high
+    - npm audit --prefix server --audit-level=high
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+# 6. Secret detection with Gitleaks
 secret_detection:
   stage: security
   image:
@@ -65,3 +87,36 @@ secret_detection:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
+# 7. Build and push Docker images
+build_and_push_images:
+  stage: package
+  image: docker:27.5.1-cli
+  services:
+    - name: docker:27.5.1-dind
+      alias: docker
+  script:
+    - docker info
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+    - docker build --pull -f client/Dockerfile --build-arg VITE_API_URL="${VITE_API_URL:-}" -t "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA" client
+    - docker build --pull -f server/Dockerfile -t "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA" server
+    - docker push "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+
+# 8. Scan Docker images with Trivy
+container_scanning:
+  stage: container_scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  variables:
+    TRIVY_USERNAME: "$CI_REGISTRY_USER"
+    TRIVY_PASSWORD: "$CI_REGISTRY_PASSWORD"
+    TRIVY_AUTH_URL: "$CI_REGISTRY"
+  script:
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+  allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
