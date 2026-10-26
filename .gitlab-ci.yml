@@ -13,6 +13,7 @@ variables:
   DOCKER_TLS_VERIFY: "1"
   DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   TRIVY_NO_PROGRESS: "true"
+  DEFECTDOJO_URL: "http://host.docker.internal:8080"
 
 cache:
   key: "mobytek-npm-cache"
@@ -108,7 +109,6 @@ build_and_push_images:
   image: docker:27.5.1-cli
   services:
     - name: docker:27.5.1-dind
-      alias: docker
   script:
     - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
