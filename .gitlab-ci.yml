@@ -53,11 +53,15 @@ check_backend:
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
+
 secret_detection:
   stage: security
-  image: zricethezav/gitleaks:latest
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
   script:
     - gitleaks detect --source . --no-git --redact
   allow_failure: false
   rules:
     - if: '$CI_COMMIT_BRANCH'
+
