@@ -1,166 +1,291 @@
-
 stages:
   - test
   - security
   - package
   - container_scan
   - reporting
+  - deploy
+
+# =========================================================
+# VARIABLES
+# =========================================================
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
   DOCKER_HOST: "tcp://docker:2376"
   DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_TLS_VERIFY: "1"
-  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  DOCKER_CERT_PATH: "/certs/client"
+
   TRIVY_NO_PROGRESS: "true"
+  TRIVY_CACHE_DIR: "$CI_PROJECT_DIR/.trivycache"
+
   DEFECTDOJO_URL: "http://host.docker.internal:8080"
+
+# =========================================================
+# CACHE
+# =========================================================
 
 cache:
   key: "mobytek-npm-cache"
   paths:
     - .npm/
 
-# 1. Build React frontend
+# =========================================================
+# 1. TESTS
+# =========================================================
+
+# Build frontend React
 build_frontend:
   stage: test
   tags:
     - mobytek
   image: node:22
+
   script:
     - npm ci --prefix client
     - npm run build --prefix client
+
   artifacts:
     paths:
       - client/dist/
     expire_in: 1 week
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 2. Lint frontend
+# Lint frontend
 lint_frontend:
   stage: test
   tags:
     - mobytek
   image: node:22
+
   script:
     - npm ci --prefix client
     - npm run lint --prefix client
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 3. Backend syntax check
+# Vérification backend Node.js
 check_backend:
   stage: test
   tags:
     - mobytek
   image: node:22
+
   script:
     - npm ci --prefix server
     - node --check server/src/index.js
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 4. SAST with Semgrep
+# =========================================================
+# 2. SECURITY
+# =========================================================
+
+# SAST avec Semgrep
 semgrep_sast:
   stage: security
   tags:
     - mobytek
+
   image:
     name: semgrep/semgrep:latest
     entrypoint: [""]
+
   script:
     - semgrep scan --config auto --error .
+
   allow_failure: false
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 5. Dependency vulnerability scanning
+# Analyse des dépendances npm
 dependency_scanning:
   stage: security
   tags:
     - mobytek
   image: node:22
+
   script:
+    - npm ci --prefix client
     - npm audit --audit-level=high --prefix client
+    - npm ci --prefix server
     - npm audit --audit-level=high --prefix server
+
   allow_failure: false
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 6. Secret detection with Gitleaks
+# Détection de secrets avec Gitleaks
 secret_detection:
   stage: security
   tags:
     - mobytek
+
   image:
     name: zricethezav/gitleaks:latest
     entrypoint: [""]
+
   script:
     - gitleaks detect --source . --no-git --redact
+
   allow_failure: false
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 7. Build and push Docker images
+# =========================================================
+# 3. BUILD AND PUSH DOCKER IMAGES
+# =========================================================
+
 build_and_push_images:
   stage: package
   tags:
     - mobytek
+
   image: docker:27.5.1-cli
+
   services:
     - name: docker:27.5.1-dind
+      alias: docker
+
   script:
+    # Vérifier Docker-in-Docker
     - docker info
-    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
-    - docker build --pull -f client/Dockerfile --build-arg VITE_API_URL="${VITE_API_URL:-}" -t "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA" client
-    - docker build --pull -f server/Dockerfile -t "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA" server
+
+    # Connexion au GitLab Container Registry
+    - |
+      echo "$CI_REGISTRY_PASSWORD" |
+        docker login "$CI_REGISTRY" \
+          --username "$CI_REGISTRY_USER" \
+          --password-stdin
+
+    # Build frontend React
+    - |
+      docker build --pull \
+        -f client/Dockerfile \
+        --build-arg VITE_API_URL="$VITE_API_URL" \
+        -t "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA" \
+        client
+
+    # Build backend Node.js
+    - |
+      docker build --pull \
+        -f server/Dockerfile \
+        -t "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA" \
+        server
+
+    # Push des deux images
     - docker push "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 8. Scan Docker images and generate JSON reports
+# =========================================================
+# 4. CONTAINER SCANNING WITH TRIVY
+# =========================================================
+
 container_scanning:
   stage: container_scan
   tags:
     - mobytek
+
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
+
   variables:
     TRIVY_USERNAME: "$CI_REGISTRY_USER"
     TRIVY_PASSWORD: "$CI_REGISTRY_PASSWORD"
     TRIVY_AUTH_URL: "$CI_REGISTRY"
+
   script:
     - mkdir -p reports
-    - trivy image --format json --output reports/trivy-client.json "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
-    - trivy image --format json --output reports/trivy-server.json "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+
+    # Analyse des vulnérabilités du frontend
+    - |
+      trivy image \
+        --cache-dir "$TRIVY_CACHE_DIR" \
+        --timeout 15m \
+        --scanners vuln \
+        --format json \
+        --output reports/trivy-client.json \
+        "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
+
+    # Analyse des vulnérabilités du backend
+    - |
+      trivy image \
+        --cache-dir "$TRIVY_CACHE_DIR" \
+        --timeout 15m \
+        --scanners vuln \
+        --format json \
+        --output reports/trivy-server.json \
+        "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+
+    # Bloquer en présence de vulnérabilités HIGH ou CRITICAL
+    - |
+      trivy image \
+        --cache-dir "$TRIVY_CACHE_DIR" \
+        --timeout 15m \
+        --scanners vuln \
+        --severity HIGH,CRITICAL \
+        --exit-code 1 \
+        "$CI_REGISTRY_IMAGE/mobytek-client:$CI_COMMIT_SHA"
+
+    - |
+      trivy image \
+        --cache-dir "$TRIVY_CACHE_DIR" \
+        --timeout 15m \
+        --scanners vuln \
+        --severity HIGH,CRITICAL \
+        --exit-code 1 \
+        "$CI_REGISTRY_IMAGE/mobytek-server:$CI_COMMIT_SHA"
+
   artifacts:
     when: always
     paths:
       - reports/
     expire_in: 1 week
+
   allow_failure: false
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
 
-# 9. Import Trivy reports into DefectDojo
+# =========================================================
+# 5. REPORTING WITH DEFECTDOJO
+# =========================================================
+
 defectdojo_import:
   stage: reporting
   tags:
     - mobytek
+
   image:
     name: curlimages/curl:8.12.1
     entrypoint: [""]
+
   needs:
     - job: container_scanning
       artifacts: true
+
   when: always
+
   script:
+    # Vérifier les rapports et le token
     - test -s reports/trivy-client.json
     - test -s reports/trivy-server.json
+    - test -n "$DEFECTDOJO_API_TOKEN"
+
+    # Import du rapport frontend
     - |
       curl --fail-with-body --silent --show-error \
         --request POST \
@@ -171,6 +296,8 @@ defectdojo_import:
         --form "product_name=Mobytek" \
         --form "engagement_name=GitLab CI" \
         --form "auto_create_context=true"
+
+    # Import du rapport backend
     - |
       curl --fail-with-body --silent --show-error \
         --request POST \
@@ -181,5 +308,68 @@ defectdojo_import:
         --form "product_name=Mobytek" \
         --form "engagement_name=GitLab CI" \
         --form "auto_create_context=true"
+
+  # Un problème de reporting ne bloque pas le déploiement.
+  allow_failure: true
+
   rules:
     - if: '$CI_COMMIT_BRANCH'
+
+# =========================================================
+# 6. CONTINUOUS DEPLOYMENT WITH GITOPS AND ARGO CD
+# =========================================================
+
+deploy_gitops:
+  stage: deploy
+  tags:
+    - mobytek
+
+  image: alpine/git:v2.47.2
+
+  variables:
+    GIT_STRATEGY: fetch
+
+  script:
+    # Vérifier le token GitOps
+    - test -n "$GITOPS_TOKEN"
+
+    # Vérifier le manifeste Kubernetes
+    - test -f k8s/deployment.yaml
+
+    # Configurer Git
+    - git config user.name "Mobytek CI"
+    - git config user.email "mobytek-ci@example.invalid"
+
+    # Configurer l'accès au dépôt avec le token CI/CD
+    - |
+      git remote set-url origin \
+        "https://oauth2:${GITOPS_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+
+    # Récupérer la dernière version de main
+    - git fetch origin "$CI_DEFAULT_BRANCH"
+
+    # Créer une branche de travail à partir de main
+    - git checkout -B "$CI_DEFAULT_BRANCH" "origin/$CI_DEFAULT_BRANCH"
+
+    # Mettre à jour les tags des images dans deployment.yaml
+    - |
+      sed -i -E \
+        "s|^([[:space:]]*image: ).*/mobytek-client:[^[:space:]]+|\1${CI_REGISTRY_IMAGE}/mobytek-client:${CI_COMMIT_SHA}|" \
+        k8s/deployment.yaml
+
+      sed -i -E \
+        "s|^([[:space:]]*image: ).*/mobytek-server:[^[:space:]]+|\1${CI_REGISTRY_IMAGE}/mobytek-server:${CI_COMMIT_SHA}|" \
+        k8s/deployment.yaml
+
+    # Publier les changements uniquement si nécessaire
+    - |
+      if ! git diff --quiet -- k8s/deployment.yaml; then
+        git add k8s/deployment.yaml
+        git commit -m "chore(gitops): deploy ${CI_COMMIT_SHORT_SHA}"
+        git push origin "HEAD:${CI_DEFAULT_BRANCH}"
+      else
+        echo "Les images sont déjà à jour."
+      fi
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
