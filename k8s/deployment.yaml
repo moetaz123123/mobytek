@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mobytek-client
-  namespace: mobytek
+  labels:
+    app: mobytek-client
 spec:
   replicas: 1
   selector:
@@ -13,20 +14,37 @@ spec:
       labels:
         app: mobytek-client
     spec:
-      imagePullSecrets:
-        - name: gitlab-registry
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
       containers:
         - name: client
-          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-client:e0438339dcefc44785d255d55b0453a920273ba9
-          imagePullPolicy: Always
+          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-client:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 8080   # nginx-unprivileged écoute sur 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mobytek-client
+spec:
+  selector:
+    app: mobytek-client
+  ports:
+    - port: 80
+      targetPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mobytek-server
-  namespace: mobytek
+  labels:
+    app: mobytek-server
 spec:
   replicas: 1
   selector:
@@ -37,11 +55,27 @@ spec:
       labels:
         app: mobytek-server
     spec:
-      imagePullSecrets:
-        - name: gitlab-registry
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000   # UID de l'utilisateur "node"
+        runAsGroup: 1000
       containers:
         - name: server
-          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-server:e0438339dcefc44785d255d55b0453a920273ba9
-          imagePullPolicy: Always
+          image: registry.gitlab.com/moetazbenameur3/mobytek/mobytek-server:latest
           ports:
-            - containerPort: 4000
+            - containerPort: 3000   # adapte à ton port réel
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mobytek-server
+spec:
+  selector:
+    app: mobytek-server
+  ports:
+    - port: 3000
+      targetPort: 3000
